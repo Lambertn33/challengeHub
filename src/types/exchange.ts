@@ -1,3 +1,5 @@
+import { EXCHANGE_API_ERROR_TYPES, EXCHANGE_CONNECTION_STATES } from '@/constants'
+
 export interface ExchangeConnectionResult {
     connected: boolean
     exchangeName?: string
@@ -12,15 +14,24 @@ export interface ExchangeConnectionResult {
   
   export interface ExchangeApiError {
     ok: false
-    errorType: 'timeout' | 'network_error' | 'server_error' | 'unknown'
+    errorType: 
+      typeof EXCHANGE_API_ERROR_TYPES.TIMEOUT 
+    | typeof EXCHANGE_API_ERROR_TYPES.NETWORK_ERROR 
+    | typeof EXCHANGE_API_ERROR_TYPES.SERVER_ERROR 
+    | typeof EXCHANGE_API_ERROR_TYPES.UNKNOWN
     message: string
   }
   
   export type ExchangeApiResponse = ExchangeApiSuccess | ExchangeApiError
   
   export type ExchangeConnectionState =
-    | { status: 'idle' }
-    | { status: 'loading' }
-    | { status: 'success'; data: ExchangeConnectionResult }
-    | { status: 'error'; errorType: ExchangeApiError['errorType']; message: string }
+    | { status: typeof EXCHANGE_CONNECTION_STATES.IDLE }
+    | { status: typeof EXCHANGE_CONNECTION_STATES.LOADING }
+    | { status: typeof EXCHANGE_CONNECTION_STATES.SUCCESS; data: ExchangeConnectionResult }
+    | { status: typeof EXCHANGE_CONNECTION_STATES.ERROR; 
+        errorType: typeof EXCHANGE_API_ERROR_TYPES.TIMEOUT 
+        | typeof EXCHANGE_API_ERROR_TYPES.NETWORK_ERROR 
+        | typeof EXCHANGE_API_ERROR_TYPES.SERVER_ERROR 
+        | typeof EXCHANGE_API_ERROR_TYPES.UNKNOWN; 
+      message: string }
   
