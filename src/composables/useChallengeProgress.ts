@@ -1,6 +1,7 @@
 import { ref, computed, type Ref } from 'vue'
 import type { ChallengeDay, Task, DayStatus } from '@/types'
 import { getInitialChallenge } from '@/data'
+import { DAY_STATUS, TASK_TYPE } from '@/constants'
 
 function allTasksComplete(tasks: Task[]): boolean {
     return tasks.every((t) => t.completed)
@@ -10,9 +11,9 @@ function computeDayStatus(day: ChallengeDay, previousDay: ChallengeDay | null): 
     const prevComplete = !previousDay || allTasksComplete(previousDay.tasks)
     const thisComplete = allTasksComplete(day.tasks)
   
-    if (!prevComplete) return 'locked'
-    if (thisComplete) return 'completed'
-    return 'in_progress'
+    if (!prevComplete) return DAY_STATUS.LOCKED
+    if (thisComplete) return DAY_STATUS.COMPLETED
+    return DAY_STATUS.IN_PROGRESS
 }
 
 export function useChallengeProgress() {
@@ -32,29 +33,29 @@ export function useChallengeProgress() {
     })
   
     const completedDaysCount = computed(() =>
-      daysWithStatus.value.filter((d) => d.status === 'completed').length
+      daysWithStatus.value.filter((d) => d.status === DAY_STATUS.COMPLETED).length
     )
   
     const currentDay = computed(() =>
-      daysWithStatus.value.find((d) => d.status === 'in_progress') ?? null
+      daysWithStatus.value.find((d) => d.status === DAY_STATUS.IN_PROGRESS) ?? null
     )
   
     const isChallengeComplete = computed(() =>
-      daysWithStatus.value.length > 0 && daysWithStatus.value.every((d) => d.status === 'completed')
+      daysWithStatus.value.length > 0 && daysWithStatus.value.every((d) => d.status === DAY_STATUS.COMPLETED)
     )
   
     function toggleTask(dayId: string, taskId: string, completed: boolean): void {
       const day = days.value.find((d) => d.id === dayId)
       if (!day) return
       const task = day.tasks.find((t) => t.id === taskId)
-      if (!task || task.type === 'exchange') return
+      if (!task || task.type === TASK_TYPE.EXCHANGE) return
       task.completed = completed
     }
   
     function setExchangeTaskComplete(dayId: string): void {
       const day = days.value.find((d) => d.id === dayId)
       if (!day) return
-      const exchangeTask = day.tasks.find((t) => t.type === 'exchange')
+      const exchangeTask = day.tasks.find((t) => t.type === TASK_TYPE.EXCHANGE)
       if (exchangeTask) exchangeTask.completed = true
     }
   
