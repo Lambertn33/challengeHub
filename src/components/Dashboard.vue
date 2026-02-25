@@ -54,14 +54,14 @@ function handleDayOpened(dayId: string) {
       </section>
 
       <section
-       
+        v-if="isChallengeComplete"
         class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950/50 p-6 text-center"
       >
         <p class="text-lg font-medium text-emerald-800 dark:text-emerald-200">
           Challenge complete
         </p>
         <p class="mt-1 text-sm text-emerald-600 dark:text-emerald-400">
-          You've finished all 5 days. Great work!
+          You've finished all {{ totalDays }} days. Great work!
         </p>
       </section>
     </div>
