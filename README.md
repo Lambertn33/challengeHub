@@ -25,6 +25,23 @@ Then open the URL shown in the terminal (e.g. `http://localhost:5173`).
 
 ---
 
+## Shortcuts & trade-offs (time cap)
+
+- **Linear retry backoff** — Used fixed steps (1s, 2s, … up to 5s) instead of exponential backoff with jitter to ship faster; good enough for the demo.
+- **Simple circuit breaker** — Single 30s cooldown after 3 failures; no half-open state or probe requests.
+- **Console-only tracking** — Events are logged with `[Track]` in the console rather than sent to an analytics backend.
+- **No persistence** — Progress is in-memory only; refresh loses state. Skipped `localStorage` or API persistence for the time box.
+- **Mock API only** — Exchange connection is a local mock (~30% failure); no real exchange integration.
+
+---
+
+## How I used AI
+
+- **Types** — I wrote a clear description of the types I needed (challenge days, tasks, day status, exchange connection state, API response shapes), gave that as the prompt to AI to generate TypeScript interfaces, then reviewed the output and made corrections (naming, union types, alignment with constants like `DAY_STATUS` and `EXCHANGE_CONNECTION_STATES`).
+- **Component design (Tailwind) and review** — Used AI for most component styling with short prompts to limit tokens; for both types and UI I reviewed each generation and corrected as needed (spacing, colors, dark mode, alignment, accessibility) instead of using the output as-is.
+
+---
+
 ## Features
 
 ### Challenge progress dashboard
