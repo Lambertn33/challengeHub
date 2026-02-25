@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ChallengeDay } from '@/types'
+import type { ChallengeDay, ExchangeConnectionState } from '@/types'
 import { DAY_STATUS, TASK_TYPE } from '@/constants'
 
 import TaskItem from './TaskItem.vue'
@@ -7,7 +7,7 @@ import TaskItem from './TaskItem.vue'
 
 defineProps<{
   day: ChallengeDay
-  exchangeState?: import('@/types').ExchangeConnectionState
+  exchangeState?: ExchangeConnectionState
   exchangeCircuitOpen?: boolean
   exchangeCooldownRemaining?: number
   exchangeIsRetrying?: boolean

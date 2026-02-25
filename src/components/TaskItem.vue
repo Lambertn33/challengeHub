@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { Task } from '../types'
-import type { ExchangeConnectionState } from '../types'
+import type { Task, ExchangeConnectionState } from '@/types'
 import ExchangeTaskSkeleton from './ExchangeTaskSkeleton.vue'
 
 const props = withDefaults(
