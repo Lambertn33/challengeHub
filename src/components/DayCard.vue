@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ChallengeDay } from '@/types'
-import { DAY_STATUS } from '@/constants'
+import { DAY_STATUS, TASK_TYPE } from '@/constants'
 
 import TaskItem from './TaskItem.vue'
 
@@ -81,7 +81,19 @@ function handleOpened(dayId: string) {
         Complete Day {{ day.dayNumber - 1 }} to unlock these tasks.
       </p>
       <ul class="space-y-0">
-        <TaskItem v-for="task in day.tasks" :key="task.id" />
+        <TaskItem
+          v-for="task in day.tasks"
+          :key="task.id"
+          :task="task"
+          :day-id="day.id"
+          :is-locked="isLocked(day)"
+          :exchange-state="task.type === TASK_TYPE.EXCHANGE ? exchangeState : undefined"
+          :exchange-circuit-open="task.type === TASK_TYPE.EXCHANGE ? exchangeCircuitOpen : false"
+          :exchange-cooldown-remaining="task.type === TASK_TYPE.EXCHANGE ? exchangeCooldownRemaining ?? 0 : 0"
+          :exchange-is-retrying="task.type === TASK_TYPE.EXCHANGE ? exchangeIsRetrying : false"
+          :on-check-exchange="task.type === TASK_TYPE.EXCHANGE ? onCheckExchange : undefined"
+          :on-retry-exchange="task.type === TASK_TYPE.EXCHANGE ? onRetryExchange : undefined"
+          @toggle="onToggleTask?.(day.id, task.id, $event)" />
       </ul>
     </div>
   </article>
