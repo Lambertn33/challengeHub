@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { useChallengeProgress } from '@/composables'
 import ProgressBar from '@/components/ProgressBar.vue'
+import NextActionBanner from '@/components/NextActionBanner.vue'
+import DayCard from '@/components/DayCard.vue'
 
-const { completedDaysCount, totalDays, currentDay, isChallengeComplete } = useChallengeProgress()
+
+const { completedDaysCount, totalDays, currentDay, isChallengeComplete, days } = useChallengeProgress()
 </script>
 
 <template>
@@ -38,6 +41,15 @@ const { completedDaysCount, totalDays, currentDay, isChallengeComplete } = useCh
           You've finished all 5 days. Great work!
         </p>
       </section>
+    </div>
+    
+    <!---Day Cards loop-->
+    <div class="flex-1 min-h-0 overflow-y-auto">
+      <ul class="mx-auto max-w-2xl px-4 pb-8 space-y-4">
+        <li v-for="day in days" :key="day.id">
+          <DayCard />
+        </li>
+      </ul>
     </div>
   </div>
 </template>
