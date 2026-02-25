@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Task, ExchangeConnectionState } from '@/types'
+import { TASK_TYPE } from '@/constants'
 import ExchangeTaskSkeleton from './ExchangeTaskSkeleton.vue'
 
 const props = withDefaults(
@@ -28,7 +29,7 @@ const emit = defineEmits<{
   toggle: [completed: boolean]
 }>()
 
-const isExchangeTask = () => props.task.type === 'exchange'
+const isExchangeTask = () => props.task.type === TASK_TYPE.EXCHANGE
 
 function handleToggle(completed: boolean) {
   if (isExchangeTask()) return
@@ -42,7 +43,7 @@ function handleToggle(completed: boolean) {
     :class="{ 'opacity-60': isLocked && !task.completed }"
   >
     <!-- Normal task: checkbox -->
-    <template v-if="task.type === 'normal'">
+    <template v-if="task.type === TASK_TYPE.NORMAL">
       <input
         type="checkbox"
         :id="`${dayId}-${task.id}`"
