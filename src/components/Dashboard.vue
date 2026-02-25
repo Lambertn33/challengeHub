@@ -1,11 +1,34 @@
 <script setup lang="ts">
-import { useChallengeProgress } from '@/composables'
+import { useChallengeProgress, useExchangeConnection, useTracking } from '@/composables'
 import ProgressBar from '@/components/ProgressBar.vue'
 import NextActionBanner from '@/components/NextActionBanner.vue'
 import DayCard from '@/components/DayCard.vue'
 
 
-const { completedDaysCount, totalDays, currentDay, isChallengeComplete, days } = useChallengeProgress()
+const { completedDaysCount, totalDays, currentDay, isChallengeComplete, days, toggleTask, setExchangeTaskComplete } = useChallengeProgress()
+const { track } = useTracking()
+const exchange = useExchangeConnection({ track });
+const exchangeState = exchange.state;
+const DAY_1_ID = "day-1";
+
+async function handleCheckExchange() {
+  const ok = await exchange.checkConnection();
+  if (ok) setExchangeTaskComplete(DAY_1_ID);
+}
+
+async function handleRetryExchange() {
+  const ok = await exchange.retry();
+  if (ok) setExchangeTaskComplete(DAY_1_ID);
+}
+
+function handleToggleTask(dayId: string, taskId: string, completed: boolean) {
+  toggleTask(dayId, taskId, completed);
+  track("task_toggled", { dayId, taskId, completed });
+}
+
+function handleDayOpened(dayId: string) {
+  track("day_opened", { dayId });
+}
 </script>
 
 <template>
@@ -47,7 +70,27 @@ const { completedDaysCount, totalDays, currentDay, isChallengeComplete, days } =
     <div class="flex-1 min-h-0 overflow-y-auto">
       <ul class="mx-auto max-w-2xl px-4 pb-8 space-y-4">
         <li v-for="day in days" :key="day.id">
-          <DayCard />
+          <DayCard
+            :day="day"
+            :exchange-state="day.id === DAY_1_ID ? exchangeState : undefined"
+            :exchange-circuit-open="
+              day.id === DAY_1_ID ? exchange.isCircuitOpen.value : false
+            "
+            :exchange-cooldown-remaining="
+              day.id === DAY_1_ID ? exchange.cooldownRemaining.value : 0
+            "
+            :exchange-is-retrying="
+              day.id === DAY_1_ID ? exchange.isRetrying.value : false
+            "
+            :on-toggle-task="handleToggleTask"
+            :on-check-exchange="
+              day.id === DAY_1_ID ? handleCheckExchange : undefined
+            "
+            :on-retry-exchange="
+              day.id === DAY_1_ID ? handleRetryExchange : undefined
+            "
+            @opened="handleDayOpened"
+          />
         </li>
       </ul>
     </div>
