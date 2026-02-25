@@ -2,6 +2,8 @@
 import type { ChallengeDay } from '@/types'
 import { DAY_STATUS } from '@/constants'
 
+import TaskItem from './TaskItem.vue'
+
 
 defineProps<{
   day: ChallengeDay
@@ -79,7 +81,7 @@ function handleOpened(dayId: string) {
         Complete Day {{ day.dayNumber - 1 }} to unlock these tasks.
       </p>
       <ul class="space-y-0">
-        task items loop
+        <TaskItem v-for="task in day.tasks" :key="task.id" />
       </ul>
     </div>
   </article>
