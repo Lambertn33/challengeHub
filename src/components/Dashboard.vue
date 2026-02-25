@@ -2,7 +2,7 @@
 import { useChallengeProgress } from '@/composables'
 import ProgressBar from '@/components/ProgressBar.vue'
 
-const { completedDaysCount, totalDays } = useChallengeProgress()
+const { completedDaysCount, totalDays, currentDay, isChallengeComplete } = useChallengeProgress()
 </script>
 
 <template>
@@ -23,8 +23,8 @@ const { completedDaysCount, totalDays } = useChallengeProgress()
         <ProgressBar :completed-count="completedDaysCount" :total="totalDays" />
       </section>
 
-      <section class="mb-6">
-        next action banner
+      <section class="mb-6" v-if="currentDay && !isChallengeComplete">
+        <NextActionBanner :current-day="currentDay" />
       </section>
 
       <section
