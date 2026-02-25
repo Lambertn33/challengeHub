@@ -1,5 +1,8 @@
 <script setup lang="ts">
+import { useChallengeProgress } from '@/composables'
+import ProgressBar from '@/components/ProgressBar.vue'
 
+const { completedDaysCount, totalDays } = useChallengeProgress()
 </script>
 
 <template>
@@ -17,7 +20,7 @@
       </header>
 
       <section class="mb-6">
-        progress bar
+        <ProgressBar :completed-count="completedDaysCount" :total="totalDays" />
       </section>
 
       <section class="mb-6">
